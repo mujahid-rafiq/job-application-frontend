@@ -1,8 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from './app-routes/AppRoutes';
+import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import AppRoutes from "./app-routes/AppRoutes";
 
 function App() {
   return (
@@ -10,6 +9,7 @@ function App() {
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
+      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
     </div>
   );
 }

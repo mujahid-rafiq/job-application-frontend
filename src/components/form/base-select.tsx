@@ -1,7 +1,6 @@
-import React from 'react'
-import type { BaseControlProps } from './base-control';
-import BaseControl from './base-control';
-// import BaseControl, { type BaseControlProps } from '../base-control';
+import React from "react";
+import type { BaseControlProps } from "./base-control";
+import BaseControl from "./base-control";
 
 export interface BaseSelectProps extends BaseControlProps {
   enumType?: object;
@@ -40,19 +39,13 @@ function BaseSelect({ append, prepend, formik, required, className, enumType, op
   }
 
   if (typeof enumType == "object") {
-    options = Object.entries(enumType)?.map(([key, value]) => (
-      console.log(key),
-      {
+    options = Object.entries(enumType)?.map(([, value]) => ({
       [valueKey]: value,
-      [labelKey]: value
-    }
-  ))
-
-    if (hideOptions?.length) options = options?.filter((v:any) => !hideOptions.includes(v.value))
-    if (showOptions?.length) options = options?.filter((v:any) => showOptions.includes(v.value))
-
-  }
-  else if (options && options.length > 0 && typeof options[0] != "object") {
+      [labelKey]: value,
+    }));
+    if (hideOptions?.length) options = options?.filter((v: any) => !hideOptions.includes(v.value));
+    if (showOptions?.length) options = options?.filter((v: any) => showOptions.includes(v.value));
+  } else if (options && options.length > 0 && typeof options[0] != "object") {
     options = options?.map((v:any) => ({
       [valueKey]: v,
       [labelKey]: v

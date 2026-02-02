@@ -1,8 +1,5 @@
-
-import type { FormikContextType } from 'formik'; // ✅ USE THIS
-import type { JSX } from 'react';
-
-// import type { FormikInterface } from '../utils/formik';
+import type { FormikContextType } from "formik";
+import type { JSX } from "react";
 
 export interface BaseControlProps {
   formik?: FormikContextType<any>;

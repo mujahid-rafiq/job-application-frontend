@@ -1,8 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "./constants";
-import JobsApplyPage from "../pages/JobsApplyPage";
-import JobsListPage from "../pages/JobsListPage";
+import { JobsApplyPage, JobsListPage } from "../pages";
 import Layout from "../components/Layout";
 
 const AppRoutes: React.FC = () => {

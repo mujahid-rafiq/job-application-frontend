@@ -1,101 +1,66 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
-import { NewJobs } from "../entites/jobs.entity";
-import { error } from "console";
+import toast from "react-hot-toast";
+import {
+  createJobInitialValues,
+  jobValidationSchema,
+  type CreateJobRequest,
+} from "../entities";
+import { jobApiService } from "../api";
 import BaseInput from "../components/form/base-input";
 import BaseTextArea from "../components/form/base-text-area";
-import BaseFileInput from "../components/form/FileInput";
-import FileUpload from "../components/form/FileUpload";
 import Button from "../components/buttons/base-button";
-import BaseSelect from "../components/form/base-select";
-// import FileUpload from '../form/FileUpload';
 
-interface FormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  position: string;
-  experience: string;
-  coverLetter: string;
+function getErrorMessage(err: any): string {
+  const data = err.response?.data;
+  if (!data) return err.message || "Network error. Is backend running?";
+  const msg = data.message;
+  if (Array.isArray(msg)) return msg.join(" ");
+  if (typeof msg === "string") return msg;
+  return data.error || "Something went wrong.";
 }
 
-const JobsApplyPage: React.FC = () => {
-  // const [formData, setFormData] = useState<FormData>({
-  //   fullName: '',
-  //   email: '',
-  //   phone: '',
-  //   position: '',
-  //   experience: '',
-  //   resume: null,
-  //   coverLetter: ''
-  // });
+function buildPayload(values: CreateJobRequest): CreateJobRequest {
+  const payload: CreateJobRequest = {
+    fullName: values.fullName.trim(),
+    email: values.email.trim(),
+    phone: values.phone.trim(),
+    position: values.position.trim(),
+  };
+  if (values.experience?.trim()) payload.experience = values.experience.trim();
+  if (values.coverLetter?.trim()) payload.coverLetter = values.coverLetter.trim();
+  return payload;
+}
 
-  const jobForm = useFormik<NewJobs>({
-    initialValues: new NewJobs(),
-    validationSchema: NewJobs.validateYupSchema(),
+export default function JobsApplyPage() {
+  const form = useFormik<CreateJobRequest>({
+    initialValues: createJobInitialValues,
+    validationSchema: jobValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        // Call your API or submit logic here
-        // await submitJob(values); // example function
-        resetForm(); // reset form on success
-      } catch (error: any) {
-        console.error(error);
-        // Optionally show a toast or error message
+        await jobApiService.create(buildPayload(values));
+        toast.success("Application submitted!");
+        resetForm();
+      } catch (err: any) {
+        toast.error(getErrorMessage(err));
       }
     },
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { id, value } = e.target;
-    // setFormData(prev => ({ ...prev, [id]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      // setFormData(prev => ({ ...prev, resume: e.target.files![0] }));
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // console.log('Form submitted:', formData);
-  };
-
   return (
-    // <form onSubmit={formik?.handleSubmit}>
     <div className="max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold text-slate-800 mb-8">
-        Apply for a Job
-      </h1>
+      <h1 className="text-4xl font-bold text-slate-800 mb-8">Apply for a Job</h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-lg p-8 space-y-6"
-      >
-        <BaseInput label="fullName" placeholder="Enter You Full Name" />
-
-        <BaseInput label="Email" placeholder="Enter You email" />
-
-        <BaseInput label="Phone" placeholder="Enter Your phone" />
-
-        <BaseInput label="Position Applying For" placeholder="Enter Your Posiiton Name" />
-        <BaseInput label="experience" placeholder="Enter Your   experience" />
-
-      
-
-        <BaseTextArea label="Text Area" placeholder="Enter Detail Message" />
-
-        {/* <FileUpload /> */}
-
-        <Button variant="primar">Submit Application</Button>
+      <form onSubmit={form.handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-6">
+        <BaseInput formik={form} name="fullName" label="Full Name" placeholder="Your full name" required />
+        <BaseInput formik={form} name="email" label="Email" type="email" placeholder="Your email" required />
+        <BaseInput formik={form} name="phone" label="Phone" placeholder="Your phone" required />
+        <BaseInput formik={form} name="position" label="Position" placeholder="Position name" required />
+        <BaseInput formik={form} name="experience" label="Experience" placeholder="e.g. 2 years" />
+        <BaseTextArea formik={form} name="coverLetter" label="Cover Letter" placeholder="Your message" rows={4} />
+        <Button type="submit" variant="primar">
+          Submit
+        </Button>
       </form>
     </div>
-    // </form>
   );
-};
-
-export default JobsApplyPage;
+}
