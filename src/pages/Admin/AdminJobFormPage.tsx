@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
-import { ROUTES } from '../app-routes/constants';
-import { JobPosting, jobPostingValidationSchema } from '../entities/job.entity';
-import BaseInput from '../components/form/base-input';
-import BaseTextArea from '../components/form/base-text-area';
-import BaseSelect from '../components/form/base-select';
-import Button from '../components/form/buttons/base-button';
+import { ROUTES } from '../../app-routes/constants';
+import { JobPosting, jobPostingValidationSchema } from '../../entities/job.entity';
+import BaseInput from '../../components/form/base-input';
+import BaseTextArea from '../../components/form/base-text-area';
+import BaseSelect from '../../components/form/base-select';
+import Button from '../../components/form/buttons/base-button';
 
 const initialValues: JobPosting = {
     title: '',

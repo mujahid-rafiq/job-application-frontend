@@ -131,17 +131,14 @@ function BaseInput({
               disabled={disabled}
               name={name}
               id={name}
-              className={`${fieldClass} ${
-                disabled && "bg-gray-300 text-gray-600"
-              } ${
-                noBorder
+              className={`${fieldClass} ${disabled && "bg-gray-300 text-gray-600"
+                } ${noBorder
                   ? ""
-                  : `border ${
-                      touched && error
-                        ? "is-invalid shadow-red-200 border-red-300"
-                        : "border-[#CBDEFF]"
-                    }`
-              } w-full mt-0 outline-none focus:outline-1 focus:border-[#9dc0fe] bg-white px-[14px] py-[12px] text-[14px] font-light text-[#071437] rounded-[8px]`}
+                  : `border ${touched && error
+                    ? "is-invalid shadow-red-200 border-red-300"
+                    : "border-[#CBDEFF]"
+                  }`
+                } w-full mt-0 outline-none focus:outline-1 focus:border-[#9dc0fe] bg-white px-[14px] py-[12px] text-[14px] font-light text-[#071437] rounded-[8px]`}
             />
           </div>
           <span className="text-xs text-gray-400 text-right">{fieldInfo}</span>
@@ -200,17 +197,14 @@ function BaseInput({
                   : (placeholder || "Choose file").toString()
               }
               value={displayValue}
-              className={`${fieldClass} ${
-                disabled && "bg-gray-300 text-gray-600"
-              } ${
-                noBorder
+              className={`${fieldClass} ${disabled && "bg-gray-300 text-gray-600"
+                } ${noBorder
                   ? ""
-                  : `border ${
-                      touched && error
-                        ? "is-invalid shadow-red-200 border-red-300"
-                        : "border-[#CBDEFF]"
-                    }`
-              } flex-1 mt-0 outline-none focus:outline-1 focus:border-[#9dc0fe] bg-white px-[14px] py-[12px] text-[14px] font-light text-[#071437] rounded-l-[8px] rounded-r-none cursor-pointer`}
+                  : `border ${touched && error
+                    ? "is-invalid shadow-red-200 border-red-300"
+                    : "border-[#CBDEFF]"
+                  }`
+                } flex-1 mt-0 outline-none focus:outline-1 focus:border-[#9dc0fe] bg-white px-[14px] py-[12px] text-[14px] font-light text-[#071437] rounded-l-[8px] rounded-r-none cursor-pointer`}
             />
 
             {/* Choose file button */}
@@ -225,9 +219,8 @@ function BaseInput({
 
           {unit && (
             <div
-              className={`absolute inset-y-0 right-3 flex items-center ${
-                unitColor ? "text-[#78829D]" : "text-[#3E7EFF]"
-              }  text-[14px]`}
+              className={`absolute inset-y-0 right-3 flex items-center ${unitColor ? "text-[#78829D]" : "text-[#3E7EFF]"
+                }  text-[14px]`}
             >
               {unit}
             </div>
@@ -236,9 +229,8 @@ function BaseInput({
 
         {icon && (
           <div
-            className={`absolute ${
-              label ? "top-10" : "top-5"
-            } left-4 flex items-center  `}
+            className={`absolute ${label ? "top-10" : "top-5"
+              } left-4 flex items-center  `}
           >
             {icon}
           </div>
@@ -282,42 +274,36 @@ function BaseInput({
           disabled={disabled}
           name={name}
           id={name}
-          className={`${fieldClass} ${
-            disabled && "bg-gray-300 text-gray-600"
-          } ${
-            noBorder
+          className={`${fieldClass} ${disabled && "bg-gray-300 text-gray-600"
+            } ${noBorder
               ? ""
-              : `border ${
-                  touched && error
-                    ? "is-invalid shadow-red-200 border-red-300"
-                    : "border-[#CBDEFF]"
-                }`
-          } w-full mt-0 outline-none focus:outline-1 focus:border-[#9dc0fe] bg-white px-[14px] py-[12px] text-[14px] font-light text-[#071437] rounded-[8px]`}
+              : `border ${touched && error
+                ? "is-invalid shadow-red-200 border-red-300"
+                : "border-[#CBDEFF]"
+              }`
+            } w-full mt-0 outline-none focus:ring-2 focus:ring-blue-50 focus:border-blue-400 bg-white ${inputPrepend ? 'pl-11' : 'pl-4'} ${inputAppend ? 'pr-11' : 'pr-4'} py-4 text-[15px] font-medium text-[#071437] rounded-xl transition-all shadow-sm`}
         />
 
         {unit && (
           <div
-            className={`absolute inset-y-0 right-3 flex items-center ${
-              unitColor ? "text-[#78829D]" : "text-[#3E7EFF]"
-            }  text-[14px]`}
+            className={`absolute inset-y-0 right-3 flex items-center ${unitColor ? "text-[#78829D]" : "text-[#3E7EFF]"
+              }  text-[14px]`}
           >
             {unit}
           </div>
         )}
         {inputPrepend && (
           <div
-            className={`absolute inset-y-0 left-3 flex items-center ${
-              inputPrependClass || ""
-            }`}
+            className={`absolute inset-y-0 left-3 flex items-center ${inputPrependClass || ""
+              }`}
           >
             {inputPrepend}
           </div>
         )}
         {inputAppend && (
           <div
-            className={`absolute inset-y-0 right-3 flex items-center ${
-              inputAppendClass || ""
-            }`}
+            className={`absolute inset-y-0 right-3 flex items-center ${inputAppendClass || ""
+              }`}
           >
             {inputAppend}
           </div>
@@ -326,9 +312,8 @@ function BaseInput({
 
       {icon && (
         <div
-          className={`absolute ${
-            label ? "top-10" : "top-5"
-          } left-4 flex items-center  `}
+          className={`absolute ${label ? "top-10" : "top-5"
+            } left-4 flex items-center  `}
         >
           {icon}
         </div>

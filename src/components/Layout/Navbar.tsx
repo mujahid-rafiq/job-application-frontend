@@ -15,8 +15,10 @@ const Navbar: React.FC = () => {
             <NavLink to={ROUTES.ADMIN_JOBS} className={({ isActive }) => `text-sm font-medium ${isActive ? 'text-blue-400' : 'hover:text-blue-300'}`}>Admin Panel</NavLink>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm">Welcome, Admin</span>
+        <div className="flex items-center gap-6">
+          <NavLink to={ROUTES.LOGIN} className="text-sm font-semibold bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-xl transition-all shadow-md shadow-blue-900/20 active:scale-95">
+            Sign In
+          </NavLink>
         </div>
       </div>
     </nav>
