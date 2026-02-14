@@ -1,5 +1,6 @@
 import { baseApi } from "../base-api";
-import type { CreateJobRequest, Job } from "../../entities";
+import type { CreateJobRequest } from "../../entities/job.entity";
+import { Job } from "../../data/mockJobs";
 
 const JOBS = "/jobs";
 

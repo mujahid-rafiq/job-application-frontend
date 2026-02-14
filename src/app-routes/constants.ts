@@ -1,6 +1,8 @@
 export const ROUTES = {
-  HOME: "/job-form",
-  JOBLISTING: "/dashboard",
-  LOGIN: "/login",
-  SIGNUP: "/signup",
+  HOME: "/career",
+  CAREER: "/career",
+  JOB_DETAILS: "/job/:id",
+  ADMIN_JOBS: "/admin/jobs",
+  ADMIN_CREATE_JOB: "/admin/jobs/new",
+  ADMIN_EDIT_JOB: "/admin/jobs/edit/:id",
 };
