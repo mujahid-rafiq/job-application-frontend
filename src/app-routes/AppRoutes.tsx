@@ -7,6 +7,7 @@ import AdminJobsPage from "../pages/Admin/AdminJobsPage";
 import AdminJobFormPage from "../pages/Admin/AdminJobFormPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import SignupPage from "../pages/Auth/SignupPage";
+import VerifyOtpPage from "../pages/Auth/VerifyOtpPage";
 import Layout from "../components/Layout/Layout";
 
 const AppRoutes: React.FC = () => {
@@ -16,6 +17,7 @@ const AppRoutes: React.FC = () => {
       <Route path={ROUTES.JOB_DETAILS} element={<JobDetailsPage />} />
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
+      <Route path="/verify-otp" element={<VerifyOtpPage />} />
       <Route
         path="*"
         element={

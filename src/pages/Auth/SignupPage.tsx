@@ -10,6 +10,8 @@ import Button from '../../components/form/buttons/base-button';
 const SignupPage: React.FC = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const formik = useFormik({
         initialValues: {
@@ -20,10 +22,35 @@ const SignupPage: React.FC = () => {
             terms: false,
         },
         validationSchema: signupSchema,
-        onSubmit: (values) => {
-            console.log('Signup attempt:', values);
-            // Integration will be handled by the user
-            navigate(ROUTES.LOGIN);
+        onSubmit: async (values) => {
+            setLoading(true);
+            setError('');
+
+            try {
+                const response = await fetch('http://localhost:3000/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        firstName: values.firstName,
+                        lastName: values.lastName,
+                        email: values.email,
+                        password: values.password,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Registration failed');
+                }
+
+                // Navigate to OTP verification page
+                navigate('/verify-otp', { state: { email: values.email } });
+            } catch (err: any) {
+                setError(err.message || 'Failed to register');
+            } finally {
+                setLoading(false);
+            }
         },
     });
 
@@ -143,13 +170,20 @@ const SignupPage: React.FC = () => {
                             )}
                         </div>
 
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                                {error}
+                            </div>
+                        )}
+
                         <div className="pt-2">
                             <Button
                                 variant="primary"
                                 type="submit"
+                                disabled={loading}
                                 btnClass="py-3 px-4 font-bold rounded-xl shadow-lg shadow-blue-200 active:scale-[0.98] transition-all bg-blue-600 hover:bg-blue-700 h-12"
                             >
-                                Create Account
+                                {loading ? 'Creating Account...' : 'Create Account'}
                             </Button>
                         </div>
                     </form>
