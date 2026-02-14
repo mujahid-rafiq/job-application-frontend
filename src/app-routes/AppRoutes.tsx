@@ -5,7 +5,7 @@ import CareerPage from "../pages/CareerPage";
 import JobDetailsPage from "../pages/JobDetailsPage";
 import AdminJobsPage from "../pages/AdminJobsPage";
 import AdminJobFormPage from "../pages/AdminJobFormPage";
-import Layout from "../components/Layout";
+import Layout from "../components/Layout/Layout";
 
 const AppRoutes: React.FC = () => {
   return (

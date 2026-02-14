@@ -7,7 +7,7 @@ import { JobPosting, jobPostingValidationSchema } from '../entities/job.entity';
 import BaseInput from '../components/form/base-input';
 import BaseTextArea from '../components/form/base-text-area';
 import BaseSelect from '../components/form/base-select';
-import Button from '../components/buttons/base-button';
+import Button from '../components/form/buttons/base-button';
 
 const initialValues: JobPosting = {
     title: '',

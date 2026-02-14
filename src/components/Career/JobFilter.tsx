@@ -1,5 +1,5 @@
 
-import { SearchIconSolid, ChevronDownIconSolid } from '../SvgIcons';
+import { SearchIconSolid, ChevronDownIconSolid } from '../Common/SvgIcons';
 
 interface JobFilterProps {
     searchTerm: string;
@@ -39,9 +39,9 @@ const JobFilter: React.FC<JobFilterProps> = ({
                     style={{ backgroundImage: 'none' }} // hide default arrow if custom one is used, but here simpler to just use default
                 >
                     <option value="">All Categories</option>
-                        {categories.map((cat) => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
+                    {categories.map((cat) => (
+                        <option key={cat} value={cat}>{cat}</option>
+                    ))}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <ChevronDownIconSolid className="fill-current h-4 w-4" />

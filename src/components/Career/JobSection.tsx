@@ -1,7 +1,7 @@
 import React from 'react';
 import { Job } from '../../data/mockJobs';
 import JobCard from './JobCard';
-import { ChevronDownIcon } from '../SvgIcons';
+import { ChevronDownIcon } from '../Common/SvgIcons';
 
 interface JobSectionProps {
     title: string;

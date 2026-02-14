@@ -1,8 +1,7 @@
 import React from 'react';
+// import { JobPosting } from '../entities/job.entity';
+import { EditIcon, TrashIcon, MapPinIcon, BriefcaseIcon, DollarSignIcon } from '../Common/SvgIcons';
 import { JobPosting } from '../../entities/job.entity';
-import { BriefcaseIcon, DollarSignIcon, EditIcon, MapPinIcon, TrashIcon } from '../SvgIcons';
-// import { JobPosting } from '../entities';
-// import { EditIcon, TrashIcon, MapPinIcon, BriefcaseIcon, DollarSignIcon } from './SvgIcons';
 
 interface AdminJobCardProps {
     job: JobPosting;
