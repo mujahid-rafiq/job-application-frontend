@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import CareerHeader from '../components/Career/CareerHeader';
-import JobFilter from '../components/Career/JobFilter';
-import JobSection from '../components/Career/JobSection';
-import { mockJobs } from '../data/mockJobs';
-import { SearchIcon, FilterIcon, ChevronDownIcon } from '../components/SvgIcons';
+import CareerHeader from '../../components/Career/CareerHeader';
+import JobFilter from '../../components/Career/JobFilter';
+import JobSection from '../../components/Career/JobSection';
+import { mockJobs } from '../../data/mockJobs';
+import { SearchIcon, FilterIcon, ChevronDownIcon } from '../../components/Common/SvgIcons';
 
 const CareerPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');

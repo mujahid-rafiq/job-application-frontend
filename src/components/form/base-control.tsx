@@ -13,7 +13,7 @@ export interface BaseControlProps {
   name?: string | any;
   append?: JSX.Element | JSX.Element[];
   prepend?: JSX.Element | JSX.Element[];
-  after?: JSX.Element | JSX.Element[]|any|any[];
+  after?: JSX.Element | JSX.Element[] | any | any[];
   labelClass?: string;
 }
 
@@ -33,24 +33,24 @@ function BaseControl({ formik, required, labelClass, className, label, children,
 
   return (
     <div className={`w-full  ${className || ""} `}>
-       {label && <label
-          className={`${labelClass} font-medium	  text-[#071437] `}
-        >
-          {label}{required ? <span className='!text-red-600'>*</span> : ""}
-        </label>}
+      {label && <label
+        className={`${labelClass} block mb-2 text-[14px] font-semibold text-gray-700`}
+      >
+        {label}{required ? <span className='text-red-500 ml-1'>*</span> : ""}
+      </label>}
 
-      
-      
-      <div className={`flex-nowrap`}>
+
+
+      <div className={`flex-nowrap relative`}>
         {prepend && <div className="input-group-prepend text-gray-500 text-xs">{prepend}</div>}
-        {children} 
+        {children}
         {append && <div className="input-group-append text-gray-500 text-xs">{append}</div>}
       </div>
 
-      {touched && error && typeof error == "string" && <span className="text-red-400 text-xs">{error}</span>}
+      {touched && error && typeof error == "string" && <span className="text-red-500 text-[12px] font-medium block mt-1.5 ml-1">{error}</span>}
       {after}
-    
-    
+
+
     </div>
   )
 }

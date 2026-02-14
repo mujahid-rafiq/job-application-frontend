@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../app-routes/constants';
-import AdminJobCard from '../components/AdminJobCard';
-import { JobPosting } from '../entities/job.entity';
-import { PlusIcon, SearchIcon, FilterIcon } from '../components/SvgIcons';
+import { ROUTES } from '../../app-routes/constants';
+import AdminJobCard from '../../components/Admin/AdminJobCard';
+import { JobPosting } from '../../entities/job.entity';
+import { PlusIcon, SearchIcon, FilterIcon } from '../../components/Common/SvgIcons';
 import toast from 'react-hot-toast';
 
 // Temporary mock data for design purposes

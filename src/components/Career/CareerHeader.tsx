@@ -1,7 +1,7 @@
 
 // import { Link } from "react-router-dom";
 import { Link } from "react-router-dom"
-import { PhoneIcon } from "../SvgIcons";
+import { PhoneIcon } from "../Common/SvgIcons";
 
 const CareerHeader: React.FC = () => {
     return (

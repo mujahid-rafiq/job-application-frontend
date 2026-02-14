@@ -2,8 +2,6 @@ import React, { useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import CareerHeader from '../../components/Career/CareerHeader';
 import { mockJobs } from '../../data/mockJobs';
-// import { mockJobs } from '../data/mockJobs';
-// import CareerHeader from '../components/Career/CareerHeader';
 
 const JobDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
