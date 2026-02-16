@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../app-routes/constants';
 import Button from '../../components/form/buttons/base-button';
+import { authApiService } from '../../api/services/auth-api.service';
 
 const VerifyOtpPage: React.FC = () => {
     const navigate = useNavigate();
@@ -65,22 +66,12 @@ const VerifyOtpPage: React.FC = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:3000/auth/verify-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp: otpValue }),
-            });
+            await authApiService.verifyOtp({ email, otp: otpValue });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Verification failed');
-            }
-
-            // Success - redirect to career page
-            navigate(ROUTES.CAREER);
+            // Success - redirect to login page
+            navigate(ROUTES.LOGIN);
         } catch (err: any) {
-            setError(err.message || 'Failed to verify OTP');
+            setError(err.response?.data?.message || err.message || 'Failed to verify OTP');
         } finally {
             setLoading(false);
         }

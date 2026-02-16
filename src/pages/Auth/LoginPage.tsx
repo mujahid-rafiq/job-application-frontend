@@ -3,13 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ROUTES } from '../../app-routes/constants';
 import { MailIcon, LockIcon, EyeIcon, EyeSlashIcon } from '../../components/Common/SvgIcons';
-import { loginSchema } from '../../entities/user.entity';
+import { loginSchema, User } from '../../entities/user.entity';
+import { Role } from '../../enums/role.enums';
 import BaseInput from '../../components/form/base-input';
 import Button from '../../components/form/buttons/base-button';
+import { authApiService } from '../../api/services/auth-api.service';
+import { toast } from 'react-hot-toast';
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -17,10 +21,31 @@ const LoginPage: React.FC = () => {
             password: '',
         },
         validationSchema: loginSchema,
-        onSubmit: (values) => {
-            console.log('Login attempt:', values);
-            // Integration will be handled by the user
-            navigate(ROUTES.ADMIN_JOBS);
+        onSubmit: async (values) => {
+            setLoading(true);
+            try {
+                const response = await authApiService.login(values);
+                console.log('Login successful:', response);
+
+                // Store in localStorage
+                localStorage.setItem('token', response.accessToken);
+                localStorage.setItem('user', JSON.stringify(response.user));
+
+                toast.success('Login successful!');
+
+                // Role-based redirection
+                if (response.user.role === Role.ADMIN) {
+                    navigate(ROUTES.ADMIN_JOBS);
+                } else {
+                    navigate(ROUTES.CAREER);
+                }
+            } catch (err: any) {
+                const message = err.response?.data?.message || 'Login failed';
+                toast.error(message);
+                console.error('Login error:', err);
+            } finally {
+                setLoading(false);
+            }
         },
     });
 

@@ -1,18 +1,19 @@
 import * as Yup from 'yup';
+import { Role } from '../enums/role.enums';
 
 export interface User {
     id: string;
     email: string;
     firstName: string;
     lastName: string;
-    role: 'admin' | 'candidate';
+    role: Role;
     avatar?: string;
-    createdAt: string;
+    createdAt?: string;
 }
 
 export interface AuthResponse {
     user: User;
-    token: string;
+    accessToken: string;
 }
 
 export const loginSchema = Yup.object({
