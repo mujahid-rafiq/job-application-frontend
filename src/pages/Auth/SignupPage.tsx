@@ -4,8 +4,10 @@ import { useFormik } from 'formik';
 import { ROUTES } from '../../app-routes/constants';
 import { MailIcon, LockIcon, UserIcon, EyeIcon, EyeSlashIcon } from '../../components/Common/SvgIcons';
 import { signupSchema } from '../../entities/user.entity';
+import { Role } from '../../enums/role.enums';
 import BaseInput from '../../components/form/base-input';
 import Button from '../../components/form/buttons/base-button';
+import { authApiService } from '../../api/services/auth-api.service';
 
 const SignupPage: React.FC = () => {
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ const SignupPage: React.FC = () => {
             lastName: '',
             email: '',
             password: '',
+            role: Role.USER, // Default to user
             terms: false,
         },
         validationSchema: signupSchema,
@@ -27,27 +30,18 @@ const SignupPage: React.FC = () => {
             setError('');
 
             try {
-                const response = await fetch('http://localhost:3000/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        firstName: values.firstName,
-                        lastName: values.lastName,
-                        email: values.email,
-                        password: values.password,
-                    }),
+                await authApiService.register({
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    email: values.email,
+                    password: values.password,
+                    role: values.role
                 });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Registration failed');
-                }
 
                 // Navigate to OTP verification page
                 navigate('/verify-otp', { state: { email: values.email } });
             } catch (err: any) {
-                setError(err.message || 'Failed to register');
+                setError(err.response?.data?.message || err.message || 'Failed to register');
             } finally {
                 setLoading(false);
             }
@@ -139,6 +133,35 @@ const SignupPage: React.FC = () => {
                             }
                             className="!my-0"
                         />
+
+                        {/* Role Selection */}
+                        <div className="space-y-1">
+                            <label className="block text-sm font-medium text-gray-700 ml-1">
+                                Register as
+                            </label>
+                            <div className="grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => formik.setFieldValue('role', Role.USER)}
+                                    className={`py-2.5 px-4 rounded-xl text-sm font-semibold transition-all border ${formik.values.role === Role.USER
+                                        ? 'bg-blue-50 border-blue-600 text-blue-600'
+                                        : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    Candidate
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => formik.setFieldValue('role', Role.ADMIN)}
+                                    className={`py-2.5 px-4 rounded-xl text-sm font-semibold transition-all border ${formik.values.role === Role.ADMIN
+                                        ? 'bg-blue-50 border-blue-600 text-blue-600'
+                                        : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    Admin
+                                </button>
+                            </div>
+                        </div>
                         <p className="text-xs text-gray-500 px-1 -mt-3">
                             Must contain at least 8 characters, one uppercase, and one number.
                         </p>

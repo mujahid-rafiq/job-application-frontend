@@ -40,7 +40,7 @@ const CareerPage: React.FC = () => {
         <div className="min-h-screen bg-white font-sans text-gray-900">
             <CareerHeader />
 
-            <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-gray-500 font-medium mb-4">Join Us</h2>
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-black">Current Openings</h1>
@@ -97,7 +97,7 @@ const CareerPage: React.FC = () => {
                         </div>
                     )}
                 </div>
-            </main>
+            </div>
         </div>
     );
 };

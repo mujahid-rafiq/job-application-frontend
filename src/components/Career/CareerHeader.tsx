@@ -1,9 +1,15 @@
-
-// import { Link } from "react-router-dom";
-import { Link } from "react-router-dom"
-import { PhoneIcon } from "../Common/SvgIcons";
+import { Link, useNavigate } from "react-router-dom"
+import { PhoneIcon, LogoutIcon } from "../Common/SvgIcons";
+import { ROUTES } from "../../app-routes/constants";
 
 const CareerHeader: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate(ROUTES.LOGIN);
+    };
     return (
         <header className="bg-white py-4 px-6 shadow-sm sticky top-0 z-50">
             <div className="max-w-7xl mx-auto flex justify-between items-center rounded-full bg-white px-8 py-3 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
@@ -29,6 +35,13 @@ const CareerHeader: React.FC = () => {
                     </button>
                     <button className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors">
                         <PhoneIcon className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 bg-red-50 text-red-600 px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-100 transition-all active:scale-95 border border-red-100 shadow-sm"
+                    >
+                        <LogoutIcon className="w-4 h-4" />
+                        <span>Logout</span>
                     </button>
                 </div>
             </div>
