@@ -3,47 +3,44 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ROUTES } from '../../app-routes/constants';
 import { MailIcon, LockIcon, UserIcon, EyeIcon, EyeSlashIcon } from '../../components/Common/SvgIcons';
-import { signupSchema } from '../../entities/user.entity';
+import { toast } from 'react-hot-toast';
+import { SignupDto } from '../../dto/signup.dto';
 import { Role } from '../../enums/role.enums';
 import BaseInput from '../../components/form/base-input';
 import Button from '../../components/form/buttons/base-button';
-import { authApiService } from '../../api/services/auth-api.service';
+import useMutateSignup from '../../react-query-hooks/user/useMutateSignup';
 
 const SignupPage: React.FC = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const signupMutation = useMutateSignup();
 
     const formik = useFormik({
-        initialValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            role: Role.USER, // Default to user
-            terms: false,
-        },
-        validationSchema: signupSchema,
-        onSubmit: async (values) => {
-            setLoading(true);
-            setError('');
-
+        initialValues: new SignupDto(),
+        validationSchema: SignupDto.yupSchema(),
+        onSubmit: async (values: SignupDto, { setSubmitting }) => {
             try {
-                await authApiService.register({
+                const signupData = {
                     firstName: values.firstName,
                     lastName: values.lastName,
                     email: values.email,
                     password: values.password,
                     role: values.role
-                });
+                };
+
+                const response = await signupMutation.mutateAsync(signupData);
+
+                setSubmitting(false);
+                toast.success('Registration successful! Please verify your email.');
+                console.log(response, 'response.data');
 
                 // Navigate to OTP verification page
                 navigate('/verify-otp', { state: { email: values.email } });
             } catch (err: any) {
-                setError(err.response?.data?.message || err.message || 'Failed to register');
-            } finally {
-                setLoading(false);
+                console.error('Signup error:', err);
+                setSubmitting(false);
+                const message = err.response?.data?.message || err.message || 'Failed to register';
+                toast.error(message);
             }
         },
     });
@@ -193,20 +190,15 @@ const SignupPage: React.FC = () => {
                             )}
                         </div>
 
-                        {error && (
-                            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-                                {error}
-                            </div>
-                        )}
 
                         <div className="pt-2">
                             <Button
                                 variant="primary"
                                 type="submit"
-                                disabled={loading}
+                                disabled={formik.isSubmitting}
                                 btnClass="py-3 px-4 font-bold rounded-xl shadow-lg shadow-blue-200 active:scale-[0.98] transition-all bg-blue-600 hover:bg-blue-700 h-12"
                             >
-                                {loading ? 'Creating Account...' : 'Create Account'}
+                                {formik.isSubmitting ? 'Creating Account...' : 'Create Account'}
                             </Button>
                         </div>
                     </form>

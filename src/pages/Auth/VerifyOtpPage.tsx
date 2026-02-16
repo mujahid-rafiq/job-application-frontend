@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../app-routes/constants';
 import Button from '../../components/form/buttons/base-button';
-import { authApiService } from '../../api/services/auth-api.service';
+import { userApi as authApiService } from '../../services/userApi';
 
 const VerifyOtpPage: React.FC = () => {
     const navigate = useNavigate();
