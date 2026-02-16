@@ -1,14 +1,24 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 import { PhoneIcon, LogoutIcon } from "../Common/SvgIcons";
 import { ROUTES } from "../../app-routes/constants";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/slices/authSlice";
+import useMutateLogout from "../../react-query-hooks/user/useMutateLogout";
+import { toast } from "react-hot-toast";
 
 const CareerHeader: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const logoutMutation = useMutateLogout();
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        navigate(ROUTES.LOGIN);
+        logoutMutation.mutate(undefined, {
+            onSettled: () => {
+                dispatch(logout());
+                toast.success('Logged out successfully');
+                navigate(ROUTES.LOGIN);
+            }
+        });
     };
     return (
         <header className="bg-white py-4 px-6 shadow-sm sticky top-0 z-50">

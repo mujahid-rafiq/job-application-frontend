@@ -3,35 +3,43 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ROUTES } from '../../app-routes/constants';
 import { MailIcon, LockIcon, EyeIcon, EyeSlashIcon } from '../../components/Common/SvgIcons';
-import { loginSchema, User } from '../../entities/user.entity';
+import { loginSchema } from '../../entities/user.entity';
 import { Role } from '../../enums/role.enums';
+import { toast } from 'react-hot-toast';
 import BaseInput from '../../components/form/base-input';
 import Button from '../../components/form/buttons/base-button';
-import { authApiService } from '../../api/services/auth-api.service';
-import { toast } from 'react-hot-toast';
+import useMutateLogin from '../../react-query-hooks/user/useMutateLogin';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../redux/slices/authSlice';
+import { LoginDto } from '../../dto/login.dto';
 
 const LoginPage: React.FC = () => {
-    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const loginMutation = useMutateLogin();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validationSchema: loginSchema,
-        onSubmit: async (values) => {
-            setLoading(true);
+        initialValues: new LoginDto(),
+        validationSchema: LoginDto.yupSchema(),
+        onSubmit: async (values: LoginDto, { setSubmitting }) => {
             try {
-                const response = await authApiService.login(values);
-                console.log('Login successful:', response);
+                const loginData = {
+                    email: values.email,
+                    password: values.password
+                };
 
-                // Store in localStorage
-                localStorage.setItem('token', response.accessToken);
-                localStorage.setItem('user', JSON.stringify(response.user));
+                // Using mutateAsync to get the response in try/catch
+                const response = await loginMutation.mutateAsync(loginData);
 
+                setSubmitting(false);
                 toast.success('Login successful!');
+
+                // Dispatch to Redux
+                dispatch(setCredentials({
+                    user: response.user,
+                    token: response.accessToken
+                }));
 
                 // Role-based redirection
                 if (response.user.role === Role.ADMIN) {
@@ -40,11 +48,10 @@ const LoginPage: React.FC = () => {
                     navigate(ROUTES.CAREER);
                 }
             } catch (err: any) {
-                const message = err.response?.data?.message || 'Login failed';
-                toast.error(message);
                 console.error('Login error:', err);
-            } finally {
-                setLoading(false);
+                setSubmitting(false);
+                const message = err.response?.data?.message || err.response?.data?.detail || 'Login failed';
+                toast.error(message);
             }
         },
     });
@@ -108,7 +115,7 @@ const LoginPage: React.FC = () => {
                                         ) : (
                                             <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
                                         )}
-                                    </button>
+                                    </button>  
                                 }
                                 className="!my-0"
                             />
@@ -138,9 +145,10 @@ const LoginPage: React.FC = () => {
                             <Button
                                 variant="primary"
                                 type="submit"
+                                disabled={loginMutation.isPending}
                                 btnClass="py-3 px-4 font-bold rounded-xl shadow-lg shadow-blue-200 active:scale-[0.98] transition-all bg-blue-600 hover:bg-blue-700 h-12"
                             >
-                                Sign In
+                                {loginMutation.isPending ? 'Signing In...' : 'Sign In'}
                             </Button>
                         </div>
                     </form>
