@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import { JobPosting } from '../entities/job.entity';
 import { EditIcon, TrashIcon, MapPinIcon, BriefcaseIcon, DollarSignIcon } from '../Common/SvgIcons';
 import { JobPosting } from '../../entities/job.entity';
@@ -6,10 +6,10 @@ import { JobPosting } from '../../entities/job.entity';
 interface AdminJobCardProps {
     job: JobPosting;
     onEdit: (id: string) => void;
-    // onDelete: (id: string) => void;
+    onDelete: (id: string) => void;
 }
 
-const AdminJobCard: React.FC<AdminJobCardProps> = ({ job, onEdit, }) => {
+const AdminJobCard: React.FC<AdminJobCardProps> = ({ job, onEdit, onDelete }) => {
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
             <div className="flex justify-between items-start mb-4">
@@ -35,6 +35,8 @@ const AdminJobCard: React.FC<AdminJobCardProps> = ({ job, onEdit, }) => {
                     <button
                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete Job"
+                        onClick={() => job?.id && onDelete(job?.id)}
+
                     >
                         <TrashIcon className="w-5 h-5" />
                     </button>

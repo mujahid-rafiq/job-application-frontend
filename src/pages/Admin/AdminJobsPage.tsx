@@ -6,28 +6,41 @@ import { JobPosting } from '../../entities/job.entity';
 import { PlusIcon, SearchIcon, FilterIcon } from '../../components/Common/SvgIcons';
 import toast from 'react-hot-toast';
 import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
+import DeleteConfirmationModal from '../../modals/deleteModal';
 
 
 const AdminJobsPage: React.FC = () => {
     const navigate = useNavigate();
-    const {data: jobs = [],isLoading} = useFetchJobs();
-    console.log ("jobs are here",jobs)
+    const { data: jobs = [], isLoading } = useFetchJobs();
+    console.log("jobs are here", jobs)
     const [searchTerm, setSearchTerm] = useState('');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [jobIdToDelete, setJobIdToDelete] = useState<string | null>(null);
 
     const handleEdit = (id: string) => {
         navigate(ROUTES.ADMIN_EDIT_JOB.replace(':id', id));
     };
 
-    // const handleDelete = (id: string) => {
-    //     if (window.confirm('Are you sure you want to delete this job?')) {
-    //         jobs(prev => prev.filter(jobs => job.id !== id));
-    //         toast.success('Job deleted successfully (UI only)');
-    //     }
-    // };
+
+    const handleDelete = (id: string) => {
+        setJobIdToDelete(id);
+        setIsDeleteModalOpen(true);
+    }
+
+    const confirmDelete = () => {
+        if (jobIdToDelete) {
+            console.log("Deleting job with ID:", jobIdToDelete);
+            toast.success('Job deleted successfully (UI logic only)');
+            // Here you would normally call your delete mutation
+            setIsDeleteModalOpen(false);
+            setJobIdToDelete(null);
+        }
+    };
 
     const handleAddNew = () => {
         navigate(ROUTES.ADMIN_CREATE_JOB);
     };
+
 
     const filteredJobs = jobs.filter(job =>
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,7 +101,7 @@ const AdminJobsPage: React.FC = () => {
                             key={job.id}
                             job={job}
                             onEdit={handleEdit}
-        
+                            onDelete={() => job.id && handleDelete(job.id)}
                         />
                     ))}
                 </div>
@@ -101,7 +114,16 @@ const AdminJobsPage: React.FC = () => {
                     <p className="text-gray-500">Try adjusting your search or filters to find what you're looking for.</p>
                 </div>
             )}
+
+            <DeleteConfirmationModal
+                open={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                title="Delete Job Posting"
+                message="Are you sure you want to delete this job posting? This action cannot be undone and will remove the job from all listings."
+            />
         </div>
+
     );
 };
 
