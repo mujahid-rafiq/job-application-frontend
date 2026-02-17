@@ -1,11 +1,11 @@
 import React from 'react';
-import { Job } from '../../data/mockJobs';
+import { JobPosting } from '../../entities/job.entity';
 import JobCard from './JobCard';
 import { ChevronDownIcon } from '../Common/SvgIcons';
 
 interface JobSectionProps {
     title: string;
-    jobs: Job[];
+    jobs: JobPosting[];
 }
 
 const JobSection: React.FC<JobSectionProps> = ({ title, jobs }) => {
@@ -21,7 +21,7 @@ const JobSection: React.FC<JobSectionProps> = ({ title, jobs }) => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {jobs?.map((job) => (
-                    <JobCard key={job?.id} job={job} />
+                    <JobCard key={job?.id} job={job as any} />
                 ))}
             </div>
         </div>

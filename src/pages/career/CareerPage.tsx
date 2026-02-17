@@ -2,29 +2,30 @@ import React, { useState, useMemo } from 'react';
 import CareerHeader from '../../components/Career/CareerHeader';
 import JobFilter from '../../components/Career/JobFilter';
 import JobSection from '../../components/Career/JobSection';
-import { mockJobs } from '../../data/mockJobs';
 import { SearchIcon, FilterIcon, ChevronDownIcon } from '../../components/Common/SvgIcons';
+import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
 
 const CareerPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const { data: jobs = [], isLoading } = useFetchJobs();
 
     const categories = useMemo(() => {
-        return Array.from(new Set(mockJobs.map(job => job.category)));
-    }, []);
+        return Array.from(new Set(jobs.map(job => job.category)));
+    }, [jobs]);
 
     const filteredJobs = useMemo(() => {
-        return mockJobs.filter(job => {
+        return jobs.filter(job => {
             const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 job.description.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesCategory = selectedCategory ? job.category === selectedCategory : true;
             return matchesSearch && matchesCategory;
         });
-    }, [searchTerm, selectedCategory]);
+    }, [searchTerm, selectedCategory, jobs]);
 
     // Group jobs by category for display
     const jobsByCategory = useMemo(() => {
-        const groups: Record<string, typeof mockJobs> = {};
+        const groups: Record<string, typeof jobs> = {};
 
         filteredJobs.forEach(job => {
             if (!groups[job.category]) {
@@ -87,7 +88,11 @@ const CareerPage: React.FC = () => {
                     </div>
 
                     {/* Job Sections */}
-                    {Object.keys(jobsByCategory).length > 0 ? (
+                    {isLoading ? (
+                        <div className="text-center py-20 text-gray-500">
+                            Loading jobs...
+                        </div>
+                    ) : Object.keys(jobsByCategory).length > 0 ? (
                         Object.entries(jobsByCategory).map(([category, jobs]) => (
                             <JobSection key={category} title={category} jobs={jobs} />
                         ))

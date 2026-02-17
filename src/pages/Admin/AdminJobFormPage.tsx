@@ -3,59 +3,61 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 import { ROUTES } from '../../app-routes/constants';
-import { JobPosting, jobPostingValidationSchema } from '../../entities/job.entity';
+import { JobPosting } from '../../entities/job.entity';
+import { CreateJobDto } from '../../dto/job-posting.dto';
 import BaseInput from '../../components/form/base-input';
 import BaseTextArea from '../../components/form/base-text-area';
 import BaseSelect from '../../components/form/base-select';
 import Button from '../../components/form/buttons/base-button';
-
-const initialValues: JobPosting = {
-    title: '',
-    company: 'Code Upscale',
-    category: '',
-    location: '',
-    salary: '',
-    jobType: 'Full-time',
-    isNew: true,
-    isActive: true,
-    description: '',
-};
+import useMutationPostJobs from '../../react-query-hooks/user/useMutatePostJob';
+import useFetchJobById from '../../react-query-hooks/user/useFetchJobById';
 
 const AdminJobFormPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const isEditMode = Boolean(id);
+    const { mutateAsync: postJob, isPending } = useMutationPostJobs();
+    const { data: jobData, isLoading: isFetching } = useFetchJobById(id);
 
-    const formik = useFormik<JobPosting>({
-        initialValues,
-        validationSchema: jobPostingValidationSchema,
+    const formik = useFormik({
+        initialValues: new CreateJobDto(),
+        validationSchema: CreateJobDto.yupSchema(),
         onSubmit: async (values) => {
-            // API integration will happen later
-            console.log('Form values:', values);
-            toast.success(isEditMode ? 'Job updated successfully (UI only)' : 'Job posted successfully (UI only)');
-            navigate(ROUTES.ADMIN_JOBS);
+            try {
+                await postJob(values);
+                toast.success(isEditMode ? 'Job updated successfully' : 'Job posted successfully');
+                navigate(ROUTES.ADMIN_JOBS);
+            } catch (error) {
+                toast.error(isEditMode ? 'Failed to update job' : 'Failed to post job');
+                console.error(error);
+            }
         },
     });
 
     useEffect(() => {
-        if (isEditMode) {
-            // In a real app, you'd fetch the job details here
-            // For now, we'll just mock it if id exists
-            toast.success('Mocking data for edit mode');
-            formik.setValues({
-                id,
-                title: 'Senior MERN Stack Developer',
-                company: 'Code Upscale',
-                category: 'Engineering',
-                location: 'Lahore, Pakistan',
-                salary: 'Rs. 150,000 - 250,000',
-                jobType: 'Full-time',
-                isNew: true,
-                isActive: true,
-                description: 'We are looking for a Senior MERN Stack Developer to lead our web development projects...',
-            });
+        if (isEditMode && jobData) {
+            formik.setValues(new CreateJobDto({
+                // id: jobData.id,
+                title: jobData.title,
+                company: jobData.company,
+                category: jobData.category,
+                location: jobData.location,
+                salary: jobData.salary,
+                jobType: jobData.jobType,
+                isNew: jobData.isNew,
+                isActive: jobData.isActive,
+                description: jobData.description,
+            }));
         }
-    }, [id, isEditMode]);
+    }, [isEditMode, jobData]);
+
+    if (isEditMode && isFetching) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-gray-500 font-medium">Loading job details...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-10">
@@ -185,6 +187,7 @@ const AdminJobFormPage: React.FC = () => {
                         type="submit"
                         variant="primary"
                         btnClass="px-10"
+                        loading={isPending}
                     >
                         {isEditMode ? 'Update Posting' : 'Publish Job'}
                     </Button>

@@ -5,66 +5,42 @@ import AdminJobCard from '../../components/Admin/AdminJobCard';
 import { JobPosting } from '../../entities/job.entity';
 import { PlusIcon, SearchIcon, FilterIcon } from '../../components/Common/SvgIcons';
 import toast from 'react-hot-toast';
+import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
+import DeleteConfirmationModal from '../../modals/deleteModal';
 
-// Temporary mock data for design purposes
-const MOCK_JOBS: JobPosting[] = [
-    {
-        id: '1',
-        title: 'Senior MERN Stack Developer',
-        company: 'Code Upscale',
-        category: 'Engineering',
-        location: 'Lahore, Pakistan',
-        salary: 'Rs. 150,000 - 250,000',
-        jobType: 'Full-time',
-        isNew: true,
-        isActive: true,
-        description: 'We are looking for a Senior MERN Stack Developer to lead our web development projects. You will be responsible for defining architecture, mentoring junior developers, and delivering high-quality software solutions.',
-    },
-    {
-        id: '2',
-        title: 'UI/UX Designer',
-        company: 'Code Upscale',
-        category: 'Design',
-        location: 'Remote',
-        salary: 'Rs. 80,000 - 120,000',
-        jobType: 'Part-time',
-        isNew: false,
-        isActive: true,
-        description: 'Join our design team to create stunning user experiences. You will work closely with product managers and developers to translate requirements into beautiful and functional designs.',
-    },
-    {
-        id: '3',
-        title: 'Sales Executive',
-        company: 'Code Upscale',
-        category: 'Sales',
-        location: 'Lahore, Pakistan',
-        salary: 'Rs. 50,000 + Commission',
-        jobType: 'Full-time',
-        isNew: false,
-        isActive: false,
-        description: 'Drive growth by identifying new business opportunities and maintaining relationships with clients.',
-    }
-];
 
 const AdminJobsPage: React.FC = () => {
     const navigate = useNavigate();
-    const [jobs, setJobs] = useState<JobPosting[]>(MOCK_JOBS);
+    const { data: jobs = [], isLoading } = useFetchJobs();
+    console.log("jobs are here", jobs)
     const [searchTerm, setSearchTerm] = useState('');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [jobIdToDelete, setJobIdToDelete] = useState<string | null>(null);
 
     const handleEdit = (id: string) => {
         navigate(ROUTES.ADMIN_EDIT_JOB.replace(':id', id));
     };
 
+
     const handleDelete = (id: string) => {
-        if (window.confirm('Are you sure you want to delete this job?')) {
-            setJobs(prev => prev.filter(job => job.id !== id));
-            toast.success('Job deleted successfully (UI only)');
+        setJobIdToDelete(id);
+        setIsDeleteModalOpen(true);
+    }
+
+    const confirmDelete = () => {
+        if (jobIdToDelete) {
+            console.log("Deleting job with ID:", jobIdToDelete);
+            toast.success('Job deleted successfully (UI logic only)');
+            // Here you would normally call your delete mutation
+            setIsDeleteModalOpen(false);
+            setJobIdToDelete(null);
         }
     };
 
     const handleAddNew = () => {
         navigate(ROUTES.ADMIN_CREATE_JOB);
     };
+
 
     const filteredJobs = jobs.filter(job =>
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -118,14 +94,14 @@ const AdminJobsPage: React.FC = () => {
             </div>
 
             {/* Jobs Grid */}
-            {filteredJobs.length > 0 ? (
+            {filteredJobs?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredJobs.map(job => (
+                    {filteredJobs?.map(job => (
                         <AdminJobCard
                             key={job.id}
                             job={job}
                             onEdit={handleEdit}
-                            onDelete={handleDelete}
+                            onDelete={() => job.id && handleDelete(job.id)}
                         />
                     ))}
                 </div>
@@ -138,7 +114,16 @@ const AdminJobsPage: React.FC = () => {
                     <p className="text-gray-500">Try adjusting your search or filters to find what you're looking for.</p>
                 </div>
             )}
+
+            <DeleteConfirmationModal
+                open={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                title="Delete Job Posting"
+                message="Are you sure you want to delete this job posting? This action cannot be undone and will remove the job from all listings."
+            />
         </div>
+
     );
 };
 
