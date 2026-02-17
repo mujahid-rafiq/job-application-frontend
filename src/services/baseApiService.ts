@@ -24,6 +24,10 @@ export class BaseAPIService {
     return this.axiosInstance.put(url, data);
   };
 
+  patch = async (url: string, data: any): Promise<any> => {
+    return this.axiosInstance.patch(url, data);
+  };
+
   delete = async (url: string): Promise<any> => {
     return this.axiosInstance.delete(url);
   };

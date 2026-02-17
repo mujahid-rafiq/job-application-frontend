@@ -19,8 +19,10 @@ export interface JobPosting {
   company: string;
   category: string;
   location: string;
-  salary: string;
-  jobType: string;
+  salary: string; // The backend uses 'salary'
+  salaryRange?: string; // Frontend component alias
+  jobType: string; // The backend uses 'jobType'
+  type?: string; // Frontend component alias
   isNew: boolean;
   isActive: boolean;
   description: string;
