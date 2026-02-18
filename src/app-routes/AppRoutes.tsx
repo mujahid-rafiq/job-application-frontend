@@ -1,14 +1,14 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "./constants";
-import CareerPage from "../pages/Career/CareerPage";
-import JobDetailsPage from "../pages/Career/JobDetailsPage";
 import AdminJobsPage from "../pages/Admin/AdminJobsPage";
 import AdminJobFormPage from "../pages/Admin/AdminJobFormPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import SignupPage from "../pages/Auth/SignupPage";
 import VerifyOtpPage from "../pages/Auth/VerifyOtpPage";
 import Layout from "../components/Layout/Layout";
+import CareerPage from "../pages/career/CareerPage";
+import JobDetailsPage from "../pages/career/JobDetailsPage";
 
 const AppRoutes: React.FC = () => {
   return (
