@@ -4,10 +4,13 @@ import JobFilter from '../../components/Career/JobFilter';
 import JobSection from '../../components/Career/JobSection';
 import { SearchIcon, FilterIcon, ChevronDownIcon } from '../../components/Common/SvgIcons';
 import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
+import ChatWindow from '../../components/Common/ChatWindow';
+import { MessageCircle } from 'lucide-react';
 
 const CareerPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [isChatOpen, setIsChatOpen] = useState(false);
     const { data: jobs = [], isLoading } = useFetchJobs();
 
     const categories = useMemo(() => {
@@ -45,10 +48,17 @@ const CareerPage: React.FC = () => {
                 <div className="text-center mb-16">
                     <h2 className="text-gray-500 font-medium mb-4">Join Us</h2>
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-black">Current Openings</h1>
-                    <p className="max-w-2xl mx-auto text-gray-600 leading-relaxed">
+                    <p className="max-w-2xl mx-auto text-gray-600 leading-relaxed mb-8">
                         Discover Exciting Career opportunities at Code Upscale and join our talented and creative team.
                         Explore our current Openings below and find the perfect role to showcase your skills and passion for design.
                     </p>
+                    <button
+                        onClick={() => setIsChatOpen(true)}
+                        className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 group"
+                    >
+                        <MessageCircle className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                        Chat with Admin
+                    </button>
                 </div>
 
                 <div className="max-w-5xl mx-auto">
@@ -103,6 +113,11 @@ const CareerPage: React.FC = () => {
                     )}
                 </div>
             </div>
+            <ChatWindow
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+                role="User"
+            />
         </div>
     );
 };

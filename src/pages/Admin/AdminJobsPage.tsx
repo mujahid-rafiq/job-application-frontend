@@ -7,15 +7,17 @@ import { PlusIcon, SearchIcon, FilterIcon } from '../../components/Common/SvgIco
 import toast from 'react-hot-toast';
 import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
 import DeleteConfirmationModal from '../../modals/deleteModal';
+import ChatWindow from '../../components/Common/ChatWindow';
+import { MessageCircle } from 'lucide-react';
 
 
 const AdminJobsPage: React.FC = () => {
     const navigate = useNavigate();
     const { data: jobs = [], isLoading } = useFetchJobs();
-    console.log("jobs are here", jobs)
     const [searchTerm, setSearchTerm] = useState('');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [jobIdToDelete, setJobIdToDelete] = useState<string | null>(null);
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     const handleEdit = (id: string) => {
         navigate(ROUTES.ADMIN_EDIT_JOB.replace(':id', id));
@@ -54,13 +56,22 @@ const AdminJobsPage: React.FC = () => {
                     <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Job Management</h1>
                     <p className="mt-1 text-gray-500">Create, edit, and manage your job postings</p>
                 </div>
-                <button
-                    onClick={handleAddNew}
-                    className="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm transition-all duration-200 hover:shadow-md active:scale-95"
-                >
-                    <PlusIcon className="w-5 h-5 mr-2" />
-                    Post a New Job
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => setIsChatOpen(true)}
+                        className="inline-flex items-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-sm transition-all duration-200 hover:shadow-md active:scale-95"
+                    >
+                        <MessageCircle className="w-5 h-5 mr-2" />
+                        Chat with User
+                    </button>
+                    <button
+                        onClick={handleAddNew}
+                        className="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm transition-all duration-200 hover:shadow-md active:scale-95"
+                    >
+                        <PlusIcon className="w-5 h-5 mr-2" />
+                        Post a New Job
+                    </button>
+                </div>
             </div>
 
             {/* Controls */}
@@ -121,6 +132,11 @@ const AdminJobsPage: React.FC = () => {
                 onConfirm={confirmDelete}
                 title="Delete Job Posting"
                 message="Are you sure you want to delete this job posting? This action cannot be undone and will remove the job from all listings."
+            />
+            <ChatWindow
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+                role="Admin"
             />
         </div>
 
