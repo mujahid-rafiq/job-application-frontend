@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../app-routes/constants';
 import AdminJobCard from '../../components/Admin/AdminJobCard';
 import { JobPosting } from '../../entities/job.entity';
-import { PlusIcon, SearchIcon, FilterIcon } from '../../components/Common/SvgIcons';
+import { PlusIcon, SearchIcon, FilterIcon } from '../../assets/SvgIcons';
 import toast from 'react-hot-toast';
-import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
+import useGetJobs from '../../react-query-hooks/job/useGetJobs';
 import DeleteConfirmationModal from '../../modals/deleteModal';
-import ChatWindow from '../../components/Common/ChatWindow';
+import ChatWindow from '../../components/chat/ChatWindow';
 import { MessageCircle } from 'lucide-react';
 
 
 const AdminJobsPage: React.FC = () => {
     const navigate = useNavigate();
-    const { data: jobs = [], isLoading } = useFetchJobs();
+    const { data: jobs = [], isLoading } = useGetJobs();
     const [searchTerm, setSearchTerm] = useState('');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [jobIdToDelete, setJobIdToDelete] = useState<string | null>(null);

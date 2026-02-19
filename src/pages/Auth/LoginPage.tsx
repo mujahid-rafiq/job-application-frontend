@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ROUTES } from '../../app-routes/constants';
-import { MailIcon, LockIcon, EyeIcon, EyeSlashIcon } from '../../components/Common/SvgIcons';
+import { MailIcon, LockIcon, EyeIcon, EyeSlashIcon } from '../../assets/SvgIcons';
 import { loginSchema } from '../../entities/user.entity';
 import { Role } from '../../enums/role.enums';
 import { toast } from 'react-hot-toast';
-import BaseInput from '../../components/form/base-input';
-import Button from '../../components/form/buttons/base-button';
+import BaseInput from '../../components/common/form/base-input';
+import Button from '../../components/common/buttons/base-button';
 import useMutateLogin from '../../react-query-hooks/user/useMutateLogin';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../redux/slices/authSlice';
@@ -115,7 +115,7 @@ const LoginPage: React.FC = () => {
                                         ) : (
                                             <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
                                         )}
-                                    </button>  
+                                    </button>
                                 }
                                 className="!my-0"
                             />

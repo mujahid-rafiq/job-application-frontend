@@ -5,19 +5,19 @@ import toast from 'react-hot-toast';
 import { ROUTES } from '../../app-routes/constants';
 import { JobPosting } from '../../entities/job.entity';
 import { CreateJobDto } from '../../dto/job-posting.dto';
-import BaseInput from '../../components/form/base-input';
-import BaseTextArea from '../../components/form/base-text-area';
-import BaseSelect from '../../components/form/base-select';
-import Button from '../../components/form/buttons/base-button';
-import useMutationPostJobs from '../../react-query-hooks/user/useMutatePostJob';
-import useFetchJobById from '../../react-query-hooks/user/useFetchJobById';
+import BaseInput from '../../components/common/form/base-input';
+import BaseTextArea from '../../components/common/form/base-text-area';
+import BaseSelect from '../../components/common/form/base-select';
+import Button from '../../components/common/buttons/base-button';
+import useMutatePostJob from '../../react-query-hooks/job/useMutatePostJob';
+import useGetJobById from '../../react-query-hooks/job/useGetJobById';
 
 const AdminJobFormPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const isEditMode = Boolean(id);
-    const { mutateAsync: postJob, isPending } = useMutationPostJobs();
-    const { data: jobData, isLoading: isFetching } = useFetchJobById(id);
+    const { mutateAsync: postJob, isPending } = useMutatePostJob();
+    const { data: jobData, isLoading: isFetching } = useGetJobById(id);
 
     const formik = useFormik({
         initialValues: new CreateJobDto(),

@@ -1,5 +1,5 @@
 
-import { SearchIconSolid, ChevronDownIconSolid } from '../Common/SvgIcons';
+import { SearchIconSolid, ChevronDownIconSolid } from '../../assets/SvgIcons';
 
 interface JobFilterProps {
     searchTerm: string;

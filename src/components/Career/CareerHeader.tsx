@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { PhoneIcon, LogoutIcon } from "../Common/SvgIcons";
+import { PhoneIcon, LogoutIcon } from "../../assets/SvgIcons";
 import { ROUTES } from "../../app-routes/constants";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";

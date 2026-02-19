@@ -1,28 +1,29 @@
 import { BaseAPIService } from "./baseApiService";
-import type { CreateJobRequest } from "../entities/job.entity";
-import { Job } from "../data/mockJobs";
-
-const JOBS = "/jobs";
 
 export class JobApi extends BaseAPIService {
-  create = async (data: CreateJobRequest): Promise<Job> => {
-    const response = await this.post(`${JOBS}/apply`, data);
-    return response.data;
+  create = (data: any) => {
+    return this.post("/jobs", data);
   };
 
-  getAll = async (): Promise<Job[]> => {
-    const response = await this.get(JOBS);
-    return response.data;
+  getAll = () => {
+    return this.get("/jobs");
   };
 
-  getById = async (id: number): Promise<Job | null> => {
-    const response = await this.get(`${JOBS}/${id}`);
-    return response.data;
+  getById = (id: string) => {
+    return this.get(`/jobs/${id}`);
   };
 
-  deleteJob = async (id: number): Promise<any> => {
-    return this.delete(`${JOBS}/${id}`);
+  update = (id: string, data: any) => {
+    return this.patch(`/jobs/${id}`, data);
   };
+
+  deleteJob = (id: string) => {
+    return this.delete(`/jobs/${id}`);
+  };
+
+  apply = (data: any) => {
+    return this.post("/jobs/apply", data);
+  }
 }
 
-export const jobApiService = new JobApi();
+export const jobApi = new JobApi();
