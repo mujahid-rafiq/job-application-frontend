@@ -1,12 +1,15 @@
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import CareerHeader from '../../components/Career/CareerHeader';
-import useFetchJobById from '../../react-query-hooks/user/useFetchJobById';
+import useGetJobById from '../../react-query-hooks/job/useGetJobById';
+import ApplyJobModal from '../../modals/ApplyJobModal';
+import { useState } from 'react';
 
 const JobDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { data: job, isLoading } = useFetchJobById(id);
+    const { data: job, isLoading } = useGetJobById(id);
+    const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
     if (isLoading) {
         return (
@@ -82,7 +85,10 @@ const JobDetailsPage: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <button className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-200">
+                        <button
+                            onClick={() => setIsApplyModalOpen(true)}
+                            className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-200"
+                        >
                             Apply Now
                         </button>
                     </div>
@@ -117,6 +123,12 @@ const JobDetailsPage: React.FC = () => {
                     </div>
                 </div>
             </main>
+
+            <ApplyJobModal
+                open={isApplyModalOpen}
+                onClose={() => setIsApplyModalOpen(false)}
+                jobTitle={job.title}
+            />
         </div>
     );
 };

@@ -2,16 +2,16 @@ import React, { useState, useMemo } from 'react';
 import CareerHeader from '../../components/Career/CareerHeader';
 import JobFilter from '../../components/Career/JobFilter';
 import JobSection from '../../components/Career/JobSection';
-import { SearchIcon, FilterIcon, ChevronDownIcon } from '../../components/Common/SvgIcons';
-import useFetchJobs from '../../react-query-hooks/user/useFetchJobs';
-import ChatWindow from '../../components/Common/ChatWindow';
+import { SearchIcon, FilterIcon, ChevronDownIcon } from '../../assets/SvgIcons';
+import useGetJobs from '../../react-query-hooks/job/useGetJobs';
+import ChatWindow from '../../components/chat/ChatWindow';
 import { MessageCircle } from 'lucide-react';
 
 const CareerPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [isChatOpen, setIsChatOpen] = useState(false);
-    const { data: jobs = [], isLoading } = useFetchJobs();
+    const { data: jobs = [], isLoading } = useGetJobs();
 
     const categories = useMemo(() => {
         return Array.from(new Set(jobs.map(job => job.category)));

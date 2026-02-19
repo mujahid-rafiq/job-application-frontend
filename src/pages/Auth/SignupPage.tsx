@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ROUTES } from '../../app-routes/constants';
-import { MailIcon, LockIcon, UserIcon, EyeIcon, EyeSlashIcon } from '../../components/Common/SvgIcons';
+import { MailIcon, LockIcon, UserIcon, EyeIcon, EyeSlashIcon } from '../../assets/SvgIcons';
 import { toast } from 'react-hot-toast';
 import { SignupDto } from '../../dto/signup.dto';
 import { Role } from '../../enums/role.enums';
-import BaseInput from '../../components/form/base-input';
-import Button from '../../components/form/buttons/base-button';
+import BaseInput from '../../components/common/form/base-input';
+import Button from '../../components/common/buttons/base-button';
 import useMutateSignup from '../../react-query-hooks/user/useMutateSignup';
 
 const SignupPage: React.FC = () => {
